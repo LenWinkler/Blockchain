@@ -36,8 +36,7 @@ def valid_proof(block_string, proof):
     guess = f'{block_string}{proof}'.encode()
     guess_hash = hashlib.sha256(guess).hexdigest()
 
-    if guess_hash[:3] == "000":
-        print('final guess', guess_hash)
+    if guess_hash[:6] == "000000":
         return True
     else:
         return False

@@ -97,7 +97,7 @@ class Blockchain(object):
         guess = f'{block_string}{proof}'.encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
         
-        return guess_hash[:3] == "000"
+        return guess_hash[:6] == "000000"
 
 
 # Instantiate our Node
@@ -113,12 +113,8 @@ blockchain = Blockchain()
 @app.route('/mine', methods=['POST'])
 def mine():
     data = request.get_json()
-    last_block = json.dumps(blockchain.last_block)
     proof = data["proof"]
     user_id = data["id"]
-    print('proof', proof)
-    print('id', user_id)
-    print('last', last_block)
     if proof and user_id:
     
         # Run valid_proof to check if proof is correct
@@ -143,7 +139,6 @@ def mine():
             return jsonify(response), 200
 
     else:
-
         response = {
             'message': 'must provide both "proof" and "id"'
         }
