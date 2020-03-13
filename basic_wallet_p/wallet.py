@@ -25,7 +25,10 @@ users_transactions = []
 
 def print_transactions(transactions):
     for item in transactions:
-        print(f'\n{item}\n')
+        if item['recipient'] == user_id:
+            print(f'\n\033[1;32;40m{item}\u001b[0m\n')
+        else:
+            print(f'\n\033[1;31;40m{item}\u001b[0m\n')
 
 r = requests.get(url='http://localhost:5000/chain')
 
@@ -48,7 +51,7 @@ for block in json_chain:
             if item['recipient'] == user_id or item['recipient'] == user_id + '\n':
                 balance += int(item['amount'])
 
-print(f'{user_id}\'s account balance is {balance} coin(s)\n')
-print(f'{user_id}\'s transactions: \n')
+print(f'\n{user_id}\'s account balance is {balance} coin(s)\n')
+print(f'\n{user_id}\'s transactions: \n')
 print_transactions(users_transactions)
 print('\n')
