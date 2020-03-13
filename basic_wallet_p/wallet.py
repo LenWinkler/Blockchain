@@ -2,7 +2,24 @@ import requests
 
 import json
 
-user_id = input('Enter your user id: ')
+# load id
+i = open('user_id.txt', 'r')
+user_id = i.read()
+i.close()
+
+if user_id == '':
+    user_id = input('Enter your user id: ')
+    i = open('user_id.txt', 'w')
+    i.write(user_id)
+    i.close()
+else:
+    returning_user = input(f'Are you {user_id}? (y/n): ')
+    if returning_user == 'n':
+        user_id = input('Enter your user id: ')
+        i = open('user_id.txt', 'w')
+        i.write(user_id)
+        i.close()
+# balance counter
 balance = 0
 
 r = requests.get(url='http://localhost:5000/chain')
@@ -23,4 +40,4 @@ for block in json_chain:
             if item['recipient'] == user_id or item['recipient'] == user_id + '\n':
                 balance += int(item['amount'])
 
-print(f'Your account balance is {balance} coin(s)')
+print(f'{user_id}\'s account balance is {balance} coin(s)')
