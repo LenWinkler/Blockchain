@@ -104,7 +104,7 @@ class Blockchain(object):
         """
         guess = f"{block_string}{proof}".encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:6] == '000000'
+        return guess_hash[:3] == '000'
 
 
 # Instantiate our Node
@@ -118,36 +118,37 @@ blockchain = Blockchain()
 
 @app.route('/last_block', methods=['GET'])
 def get_last_block():
-    response = blockchain.last_block()
+    response = blockchain.last_block
 
     return jsonify(response), 200
 
 @app.route('/mine', methods=['POST'])
 def mine():
     # pull data out of post
+    print('get json',request.get_json())
     data = request.get_json()
     print('data', data)
-    if not data.proof and data.id:
-        error_response = {'Error: proof and id are required'}
+    if not data['proof'] and data['id']:
+        response = {"message": "proof and id are required!"}
 
-        return jsonify(error_response), 400
+        return jsonify(response), 400
 
     # stringify last block
-    block_string = json.dumps(blockchain.last_block(), sort_keys=True)
-    
+    block_string = json.dumps(blockchain.last_block, sort_keys=True)
+
     # check if proof is valid
-    if blockchain.valid_proof(block_string, data.proof):
+    if blockchain.valid_proof(block_string, data['proof']):
 
-        blockchain.new_block(data.proof)
+        blockchain.new_block(data['proof'])
 
-        success_response = {'Success! New block forged'}
+        response = {"message": "New Block Forged"}
 
-        return jsonify(success_response), 201
+        return jsonify(response), 201
 
     else:
-        failure_response = {'Proof not valid for current block'}
+        response = {"message": "Proof not valid for current block"}
 
-        return jsonify(failure_response), 200
+        return jsonify(response), 200
 
 
 @app.route('/chain', methods=['GET'])
