@@ -3,6 +3,7 @@ import requests
 
 import sys
 import json
+import time
 
 
 def proof_of_work(block):
@@ -76,10 +77,15 @@ if __name__ == '__main__':
         # new_proof = ???
 
         print('Mining started...\n')
+        # timer start
+        start_time = time.time()
+        # find proof
         new_proof = proof_of_work(data)
+        # timer stop
+        end_time = time.time()
 
         # When found, POST it to the server {"proof": new_proof, "id": id}
-        print('Proof found. Submitting to node...\n')
+        print(f'Proof found in {end_time - start_time} seconds. Submitting to node...\n')
         post_data = {"proof": new_proof, "id": id}
 
         r = requests.post(url=node + "/mine", json=post_data)
@@ -91,4 +97,4 @@ if __name__ == '__main__':
         
         if data['message'] == 'New Block Forged':
             coins_mined += 1
-            print(f'Success! Total coins mined: {coins_mined}')
+            print(f'Success! Total coins mined: {coins_mined}\n')
