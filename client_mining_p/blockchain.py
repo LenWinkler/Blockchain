@@ -104,7 +104,7 @@ class Blockchain(object):
         """
         guess = f"{block_string}{proof}".encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:3] == '000'
+        return guess_hash[:6] == '000000'
 
 
 # Instantiate our Node
@@ -125,9 +125,7 @@ def get_last_block():
 @app.route('/mine', methods=['POST'])
 def mine():
     # pull data out of post
-    print('get json',request.get_json())
     data = request.get_json()
-    print('data', data)
     if not data['proof'] and data['id']:
         response = {"message": "proof and id are required!"}
 

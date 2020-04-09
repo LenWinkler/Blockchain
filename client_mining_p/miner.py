@@ -41,7 +41,7 @@ def valid_proof(block_string, proof):
     # hash current guess
     guess_hash = hashlib.sha256(guess).hexdigest()
     # return appropriate bool
-    return guess_hash[:3] == '000'
+    return guess_hash[:6] == '000000'
 
 
 if __name__ == '__main__':
