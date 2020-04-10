@@ -7,20 +7,26 @@ function App() {
 
   const [chain, setChain] = useState([]);
   const [transactions, setTransactions] = useState();
+  const [user, setUser] = useState();
+  const [sender, setSender] = useState();
+  const [recipient, setRecipient] = useState();
+  const [amount, setAmount] = useState();
 
   useEffect(() => {
     axios.get('http://localhost:5000/chain')
     .then(res => {
-      console.log('res', res.data.chain)
       setChain(res.data.chain)
-      console.log('chain', chain)
     })
     .catch(err => console.log('GET error',err))
-  }, [])
+  },[])
+ 
+  console.log(chain)
 
   return (
     <div className="App">
-      <p>Wallet app</p>
+      <h1>Wallet</h1>
+
+
     </div>
   );
 }

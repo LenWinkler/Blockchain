@@ -118,11 +118,8 @@ class Blockchain(object):
         correct number of leading zeroes.
         :return: True if the resulting hash is a valid proof, False otherwise
         """
-        print('proof in valid_proof on server', proof)
         guess = f'{block_string}{proof}'.encode()
-        print('guess str on server', guess)
         guess_hash = hashlib.sha256(guess).hexdigest()
-        print('guess hash', guess_hash)
         return guess_hash[:4] == '0000'
 
 
@@ -147,12 +144,10 @@ def mine():
         return jsonify(response), 400
 
     proof = data['proof']
-    print('proof in server', proof)
 
     # Determine if the proof is valid
     last_block = blockchain.last_block
     last_block_string = json.dumps(last_block, sort_keys=True)
-    print('last block string', last_block_string)
 
     if blockchain.valid_proof(last_block_string, proof):
         blockchain.new_transaction(sender="0", recipient=data["id"].strip(), amount=1)
