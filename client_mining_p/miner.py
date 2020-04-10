@@ -42,7 +42,7 @@ def valid_proof(block_string, proof):
     # hash current guess
     guess_hash = hashlib.sha256(guess).hexdigest()
     # return appropriate bool
-    return guess_hash[:6] == '000000'
+    return guess_hash[:4] == '0000'
 
 
 if __name__ == '__main__':
@@ -80,13 +80,13 @@ if __name__ == '__main__':
         # timer start
         start_time = time.time()
         # find proof
-        new_proof = proof_of_work(data)
+        new_proof = proof_of_work(data['last_block'])
         # timer stop
         end_time = time.time()
 
         # When found, POST it to the server {"proof": new_proof, "id": id}
         print(f'Proof found in {end_time - start_time} seconds. Submitting to node...\n')
-        post_data = {"proof": new_proof, "id": id}
+        post_data = {'proof': new_proof, "id": id}
 
         r = requests.post(url=node + "/mine", json=post_data)
         data = r.json()
@@ -94,7 +94,7 @@ if __name__ == '__main__':
         # TODO: If the server responds with a 'message' 'New Block Forged'
         # add 1 to the number of coins mined and print it.  Otherwise,
         # print the message from the server.
-        
+        print('new block', data)
         if data['message'] == 'New Block Forged':
             coins_mined += 1
             print(f'Success! Total coins mined: {coins_mined}\n')
